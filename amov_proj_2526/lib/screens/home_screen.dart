@@ -88,7 +88,7 @@ class _WeatherCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       child: Padding(
-        padding: const EdgeInsets.all(12),
+        padding: const EdgeInsets.all(8),
         child: FutureBuilder<Weather>(
           future: future,
           builder: (context, snapshot) {

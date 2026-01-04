@@ -1,17 +1,33 @@
 import 'package:flutter/material.dart';
-
 import '../services/poi_repository.dart';
 import 'poi_list_screen.dart';
 
-class CategoriesScreen extends StatelessWidget {
+class CategoriesScreen extends StatefulWidget {
   const CategoriesScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final repo = PoiRepository();
+  State<CategoriesScreen> createState() => _CategoriesScreenState();
+}
 
+class _CategoriesScreenState extends State<CategoriesScreen> {
+  final repo = PoiRepository();
+  late Future<List<String>> _future;
+
+  @override
+  void initState() {
+    super.initState();
+    _future = repo.loadCategories();
+  }
+
+  Future<void> _refresh() async {
+    setState(() => _future = repo.loadCategories());
+    await _future;
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return FutureBuilder<List<String>>(
-      future: repo.loadCategories(),
+      future: _future,
       builder: (context, snapshot) {
         if (snapshot.connectionState != ConnectionState.done) {
           return const Center(child: CircularProgressIndicator());
@@ -25,26 +41,27 @@ class CategoriesScreen extends StatelessWidget {
           return const Center(child: Text('No categories found in poi.json'));
         }
 
-        return ListView.separated(
-          padding: const EdgeInsets.all(12),
-          itemCount: categories.length,
-          separatorBuilder: (_, __) => const SizedBox(height: 10),
-          itemBuilder: (context, index) {
-            final cat = categories[index];
-            return Card(
-              child: ListTile(
-                title: Text(cat),
-                trailing: const Icon(Icons.chevron_right),
-                onTap: () {
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (_) => PoiListScreen(category: cat),
-                    ),
-                  );
-                },
-              ),
-            );
-          },
+        return RefreshIndicator(
+          onRefresh: _refresh,
+          child: ListView.separated(
+            padding: const EdgeInsets.all(12),
+            itemCount: categories.length,
+            separatorBuilder: (_, __) => const SizedBox(height: 10),
+            itemBuilder: (context, index) {
+              final cat = categories[index];
+              return Card(
+                child: ListTile(
+                  title: Text(cat),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (_) => PoiListScreen(category: cat)),
+                    );
+                  },
+                ),
+              );
+            },
+          ),
         );
       },
     );

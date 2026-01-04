@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/poi.dart';
 import '../services/favorites_service.dart';
 import '../services/poi_repository.dart';
+import '../widgets/poi_card.dart';
 import 'poi_detail_screen.dart';
 
 class FavoritesScreen extends StatefulWidget {
@@ -34,6 +35,7 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
     setState(() {
       _future = _load();
     });
+    await _future;
   }
 
   @override
@@ -66,19 +68,15 @@ class _FavoritesScreenState extends State<FavoritesScreen> {
             separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final poi = favs[index];
-              return Card(
-                child: ListTile(
-                  title: Text(poi.name),
-                  subtitle: Text(poi.shortDescription),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () async {
-                    await Navigator.of(context).push(
-                      MaterialPageRoute(builder: (_) => PoiDetailScreen(poi: poi)),
-                    );
-                    // When coming back, refresh list (because favorite state may change)
-                    _refresh();
-                  },
-                ),
+              return PoiCard(
+                poi: poi,
+                onTap: () async {
+                  await Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => PoiDetailScreen(poi: poi)),
+                  );
+                  // refresh when returning because the user may unfavorite it
+                  await _refresh();
+                },
               );
             },
           ),

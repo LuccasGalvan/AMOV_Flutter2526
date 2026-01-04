@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/poi.dart';
 import '../services/poi_repository.dart';
+import '../widgets/poi_card.dart';
 import 'poi_detail_screen.dart';
 
 class PoiListScreen extends StatelessWidget {
@@ -35,19 +36,13 @@ class PoiListScreen extends StatelessWidget {
             separatorBuilder: (_, __) => const SizedBox(height: 10),
             itemBuilder: (context, index) {
               final poi = pois[index];
-              return Card(
-                child: ListTile(
-                  title: Text(poi.name),
-                  subtitle: Text(poi.shortDescription),
-                  trailing: const Icon(Icons.chevron_right),
-                  onTap: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => PoiDetailScreen(poi: poi),
-                      ),
-                    );
-                  },
-                ),
+              return PoiCard(
+                poi: poi,
+                onTap: () {
+                  Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => PoiDetailScreen(poi: poi)),
+                  );
+                },
               );
             },
           );
