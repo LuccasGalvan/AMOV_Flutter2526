@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../models/weather.dart';
+import '../services/weather_service.dart';
+import '../utils/app_constants.dart';
 import 'categories_screen.dart';
 import 'favorites_screen.dart';
-import '../utils/app_constants.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -19,6 +21,20 @@ class _HomeScreenState extends State<HomeScreen> {
     FavoritesScreen(),
   ];
 
+  late Future<Weather> _weatherFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    _weatherFuture = WeatherService().fetchCurrentWeather();
+  }
+
+  void _refreshWeather() {
+    setState(() {
+      _weatherFuture = WeatherService().fetchCurrentWeather();
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = _index == 0 ? 'Categories' : 'Favorites';
@@ -26,8 +42,26 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('${AppConstants.appTitle} — $title'),
+        actions: [
+          IconButton(
+            tooltip: 'Refresh weather',
+            onPressed: _refreshWeather,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
       ),
-      body: _pages[_index],
+      body: Column(
+        children: [
+          // Weather header (always visible = "home has weather")
+          Padding(
+            padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+            child: _WeatherCard(future: _weatherFuture),
+          ),
+
+          // Current tab page
+          Expanded(child: _pages[_index]),
+        ],
+      ),
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _index,
         onTap: (i) => setState(() => _index = i),
@@ -41,6 +75,68 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Favorites',
           ),
         ],
+      ),
+    );
+  }
+}
+
+class _WeatherCard extends StatelessWidget {
+  final Future<Weather> future;
+  const _WeatherCard({required this.future});
+
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(12),
+        child: FutureBuilder<Weather>(
+          future: future,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState != ConnectionState.done) {
+              return const Row(
+                children: [
+                  SizedBox(
+                    width: 18,
+                    height: 18,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  SizedBox(width: 10),
+                  Text('Loading weather...'),
+                ],
+              );
+            }
+
+            if (snapshot.hasError) {
+              return Text('Weather unavailable: ${snapshot.error}');
+            }
+
+            final w = snapshot.data!;
+            final desc = WeatherService.describeWeatherCode(w.weatherCode);
+
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      AppConstants.cityName,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(desc),
+                    const SizedBox(height: 4),
+                    Text('Wind: ${w.windSpeed.toStringAsFixed(1)} km/h'),
+                  ],
+                ),
+                Text(
+                  '${w.temperatureC.toStringAsFixed(1)}°C',
+                  style: Theme.of(context).textTheme.headlineSmall,
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }
