@@ -50,16 +50,32 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-      body: Column(
+      body: Stack(
         children: [
-          // Weather header (always visible = "home has weather")
-          Padding(
-            padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
-            child: _WeatherCard(future: _weatherFuture),
+          // Background image
+          Positioned.fill(
+            child: Image.asset(
+              AppConstants.homeBackgroundAssetPath,
+              fit: BoxFit.cover,
+              alignment: Alignment.center,
+            ),
           ),
 
-          // Current tab page
-          Expanded(child: _pages[_index]),
+          // overlay for readability
+          Positioned.fill(
+            child: Container(color: Colors.black.withOpacity(0.25)),
+          ),
+
+          // Your existing content
+          Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 12, 12, 6),
+                child: _WeatherCard(future: _weatherFuture),
+              ),
+              Expanded(child: _pages[_index]),
+            ],
+          ),
         ],
       ),
       bottomNavigationBar: BottomNavigationBar(

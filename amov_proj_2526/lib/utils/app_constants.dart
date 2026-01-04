@@ -3,6 +3,7 @@ class AppConstants {
 
   // Assets
   static const poiJsonAssetPath = 'assets/data/poi.json';
+  static const homeBackgroundAssetPath = 'assets/images/city.jpg';
 
   // Open-Meteo
   static const openMeteoBaseUrl = 'https://api.open-meteo.com/v1/forecast';
