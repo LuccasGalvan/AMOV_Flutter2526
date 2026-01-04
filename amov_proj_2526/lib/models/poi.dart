@@ -8,7 +8,7 @@ class Poi {
   final double averagePrice;
   final String location;
 
-  // ✅ now supports multiple categories
+  // now supports multiple categories
   final List<String> categories;
 
   const Poi({
