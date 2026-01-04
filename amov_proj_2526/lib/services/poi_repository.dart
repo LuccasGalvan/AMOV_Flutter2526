@@ -32,8 +32,10 @@ class PoiRepository {
 
     final set = <String>{};
     for (final p in pois) {
-      final c = p.category.trim();
-      if (c.isNotEmpty) set.add(c);
+      for (final c in p.categories) {
+        final trimmed = c.trim();
+        if (trimmed.isNotEmpty) set.add(trimmed);
+      }
     }
 
     final list = set.toList();
@@ -43,7 +45,7 @@ class PoiRepository {
 
   Future<List<Poi>> loadPoisByCategory(String category) async {
     final pois = await loadPois();
-    return pois.where((p) => p.category == category).toList();
+    return pois.where((p) => p.categories.contains(category)).toList();
   }
 
   /// Normalize the image path (JSON gives relative path)

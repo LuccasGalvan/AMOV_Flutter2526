@@ -5,11 +5,66 @@
       "id": "mon_jeronimos",
       "category": "Monuments",
       "name": "Mosteiro dos Jerónimos",
-      "shortDescription": "A UNESCO World Heritage monastery in Lisbon.",
+      "short_description": "A UNESCO World Heritage monastery in Lisbon.",
       "description": "Longer description here...",
       "image": "assets/images/jeronimos.jpg",
       "schedule": "10:00 - 17:30",
-      "averagePrice": 12.0,
+      "average_price": 12.0,
+      "location": "Lisbon, Portugal"
+    },
+    {
+      "id": "mus_national_tile",
+      "category": "Museums",
+      "name": "Museu Nacional do Azulejo",
+      "short_description": "A museum dedicated to Portuguese tile art.",
+      "description": "Explore centuries of azulejo history, from traditional patterns to large-scale panels and contemporary works.",
+      "image": "assets/images/jeronimos.jpg",
+      "schedule": "10:00 - 18:00",
+      "average_price": 5.0,
+      "location": "Lisbon, Portugal"
+    },
+    {
+      "id": "gas_time_out_market",
+      "category": "Gastronomy",
+      "name": "Time Out Market",
+      "short_description": "Food hall with many local dishes in one place.",
+      "description": "A lively market featuring multiple vendors with Portuguese classics and modern cuisine. Great for groups and trying variety.",
+      "image": "assets/images/jeronimos.jpg",
+      "schedule": "10:00 - 00:00",
+      "average_price": 15.0,
+      "location": "Lisbon, Portugal"
+    },
+    {
+      "id": "nat_monsanto_park",
+      "category": "Nature",
+      "name": "Parque Florestal de Monsanto",
+      "short_description": "The largest green park in Lisbon for walks and views.",
+      "description": "A huge forested area with trails, picnic spots, viewpoints, and a break from the city noise.",
+      "image": "assets/images/jeronimos.jpg",
+      "schedule": "Always open",
+      "average_price": 0.0,
+      "location": "Lisbon, Portugal"
+    },
+    {
+      "id": "mus_maat",
+      "categories": ["Museums", "Monuments"],
+      "name": "MAAT (Museum of Art, Architecture and Technology)",
+      "short_description": "Modern museum by the river with striking architecture.",
+      "description": "A contemporary museum space and landmark building—great for exhibitions, photos, and a riverside walk.",
+      "image": "assets/images/jeronimos.jpg",
+      "schedule": "10:00 - 19:00",
+      "average_price": 9.0,
+      "location": "Lisbon, Portugal"
+    },
+    {
+      "id": "gas_pasteis_belem",
+      "categories": ["Gastronomy", "Monuments"],
+      "name": "Pastéis de Belém",
+      "short_description": "Famous bakery for the original pastel de nata recipe.",
+      "description": "A historic pastry shop near major monuments—perfect for tasting the classic custard tart fresh from the oven.",
+      "image": "assets/images/jeronimos.jpg",
+      "schedule": "08:00 - 23:00",
+      "average_price": 2.0,
       "location": "Lisbon, Portugal"
     }
   ]

@@ -3,13 +3,13 @@ class Poi {
   final String name;
   final String shortDescription;
   final String description;
-  final String image;       // relative path from JSON
+  final String image;
   final String schedule;
   final double averagePrice;
   final String location;
 
-  // Filtering
-  final String category;
+  // ✅ now supports multiple categories
+  final List<String> categories;
 
   const Poi({
     required this.id,
@@ -20,11 +20,21 @@ class Poi {
     required this.schedule,
     required this.averagePrice,
     required this.location,
-    required this.category,
+    required this.categories,
   });
 
   factory Poi.fromJson(Map<String, dynamic> json) {
     final avg = json['average_price'];
+
+    // accept either "category": "X" or "categories": ["X","Y"]
+    final rawCats = json['categories'];
+    final rawCat = json['category'];
+
+    final List<String> categories = (rawCats is List)
+        ? rawCats.map((e) => e.toString()).where((s) => s.trim().isNotEmpty).toList()
+        : (rawCat != null && rawCat.toString().trim().isNotEmpty)
+        ? [rawCat.toString()]
+        : const [];
 
     return Poi(
       id: (json['id'] ?? '').toString(),
@@ -35,7 +45,7 @@ class Poi {
       schedule: (json['schedule'] ?? '').toString(),
       averagePrice: avg is num ? avg.toDouble() : double.tryParse('$avg') ?? 0.0,
       location: (json['location'] ?? '').toString(),
-      category: (json['category'] ?? '').toString(),
+      categories: categories,
     );
   }
 }
